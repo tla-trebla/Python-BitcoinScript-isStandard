@@ -1,6 +1,6 @@
 from bitcoin.wallet import CBitcoinAddress
 from bitcoin.core import CScript, x
-from bitcoin.core.script import OP_CHECKSIG, OP_DUP, OP_HASH160, OP_EQUALVERIFY, OP_EQUAL, OP_RETURN
+from bitcoin.core.script import OP_CHECKSIG, OP_DUP, OP_HASH160, OP_EQUALVERIFY, OP_EQUAL, OP_RETURN, OP_TRUE
 
 def is_p2pkh(script):
     ops = list(script)
@@ -63,6 +63,22 @@ def test_op_return_script(address_str):
     
     print("---------------------------")
 
+def test_nonstandard_script(address_str):
+    script = CScript([OP_TRUE, address_str.encode()])
+    
+    print("Script:", script)
+    print("Hex:", script.hex())
+
+    if is_p2pkh(script):
+        print("This is a P2PKH script.")
+    elif is_p2sh(script):
+        print("This is a P2SH script.")
+    else:
+        print("This is a non-standard script.")
+
+    print("---------------------------")
+
 test_script("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 test_script("3AdD7ZaJQw9m1maN39CeJ1zVyXQLn2MEHR")
 test_op_return_script("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
+test_nonstandard_script("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
